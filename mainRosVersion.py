@@ -9,29 +9,9 @@ import cpgV2
 import csv
 import numpy as np
 import random
-from statistics import mean
 
 dataFilePath = '/home/quist/Documents/MasterThesis/footContactDataFolder/vortexTest.csv'
 newFile = False
-
-forceData = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
-force = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-def forceFeedbackRunningAvg(self, data):
-        bufferSize = 10
-        if bufferSize > len(self.forceData[0]):
-            for i in range(18):
-                self.forceData[i].append(data.data[i])
-
-            for i, element in enumerate(self.forceData):
-                self.force[i] = mean(element)
-        else:
-            for i in range(18):
-                self.forceData[i].pop(0)
-                self.forceData[i].append(data.data[i])
-
-            for i, element in enumerate(self.forceData):
-                self.force[i] = mean(element)
 
 def saveData(footContactForceData, angle):
     with open(dataFilePath, 'a+') as myfile:
@@ -90,11 +70,8 @@ def main(argv):
                 #code here
 
 
-                #print(sim.simxReadForceSensor(clientID, "3D_force0", sim.simx_opmode_blocking))
-
-
                 if counter == 150:
-                    saveData(force, targetAngle)
+                    saveData(ros_handle.force, targetAngle)
                     print("Runs remaining: " ,len(targetAngles))
                     if len(targetAngles) <= 0:
                         Done = True
